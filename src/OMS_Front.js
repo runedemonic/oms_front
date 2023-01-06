@@ -6,8 +6,70 @@ import "./OMS_Front.css"
 function Practice() {
     const [text, setText] = useState([]);
 
+    const [orders, setorders] = useState({
+        company_name: "",
+        product_name: "",
+        product_code: "",
+        price: "",
+        quantity: "",
+        sum: "",
+        due_date: "",
+    });
+
+    const handleChange = e => {
+        setorders({
+            ...orders,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        alert(JSON.stringify(orders, null, 2))
+    }
+
     return (
         <>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="product_name"
+                    value={orders.product_name}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="product_code"
+                    value={orders.product_code}
+                    onChange={handleChange}
+                />
+                <input
+                    type="number"
+                    name="price"
+                    value={orders.price}
+                    onChange={handleChange}
+                />
+                <input
+                    type="number"
+                    name="quantity"
+                    value={orders.quantity}
+                    onChange={handleChange}
+                />
+                <input
+                    type="number"
+                    name="sum"
+                    value={orders.quantity * orders.price}
+                    onChange={handleChange}
+                />
+                <input
+                    type="date"
+                    name="due_date"
+                    value={orders.due_date}
+                    onChange={handleChange}
+                />
+                <button type="submit">완료</button>
+            </form>
+
             <h1> 연습</h1>
             <div className="btn-primary">
                 <button onClick={() => {
@@ -34,9 +96,9 @@ function Practice() {
                             setText([...response.data]);
                             console.log(response.data);
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             console.log(error);
-                    });
+                        });
 
                 }}>
                     GET
@@ -51,12 +113,13 @@ function Practice() {
                             {e.due_date}
                         </span>
                         <button className="btn-delete"
-                                onClick={() =>{
+                                onClick={() => {
                                     axios.delete(`http://localhost:8000/${e.id}`)
                                     setText(text.filter((text) => text.id !== e.id))
                                 }}>
                             DELETE
-                        </button>{" "}
+                        </button>
+                        {" "}
                     </div>
                 </div>
             ))}
