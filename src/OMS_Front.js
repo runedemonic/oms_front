@@ -20,17 +20,39 @@ function Practice() {
         setorders({
             ...orders,
             [e.target.name]: e.target.value,
+
         })
+
     }
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        alert(JSON.stringify(orders, null, 2))
+    const handleSubmit = () => {
+        axios.post('http://localhost:8000/', {
+            company_name: orders.company_name,
+            product_name: orders.product_name,
+            product_code: orders.product_code,
+            price: orders.price,
+            quantity: orders.quantity,
+            sum: orders.price * orders.quantity,
+            due_date: orders.due_date,
+        }).then(function (response) {
+            console.log(response);
+        })
+            .catch(function (error) {
+                console.log(error);
+            })
+        // e.preventDefault()
+        // alert(JSON.stringify(orders, null, 2))
     }
 
     return (
         <>
             <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="company_name"
+                    value={orders.company_name}
+                    onChange={handleChange}
+                />
                 <input
                     type="text"
                     name="product_name"
@@ -56,12 +78,6 @@ function Practice() {
                     onChange={handleChange}
                 />
                 <input
-                    type="number"
-                    name="sum"
-                    value={orders.quantity * orders.price}
-                    onChange={handleChange}
-                />
-                <input
                     type="date"
                     name="due_date"
                     value={orders.due_date}
@@ -72,24 +88,24 @@ function Practice() {
 
             <h1> 연습</h1>
             <div className="btn-primary">
-                <button onClick={() => {
-                    axios.post("http://127.0.0.1:8000/", {
-                        company_name: "테스트",
-                        product_name: "제품이름",
-                        product_code: "제품 코드",
-                        price: "2",
-                        quantity: "123",
-                        sum: "246",
-                        due_date: "2022-12-31",
-                    }).then(function (response) {
-                        console.log(response);
-                    })
-                        .catch(function (error) {
-                            console.log(error);
-                        })
-                }}>
-                    POST
-                </button>
+                {/*<button onClick={() => {*/}
+                {/*    axios.post("http://127.0.0.1:8000/", {*/}
+                {/*        company_name: "테스트",*/}
+                {/*        product_name: "제품이름",*/}
+                {/*        product_code: "제품 코드",*/}
+                {/*        price: "2",*/}
+                {/*        quantity: "123",*/}
+                {/*        sum: "246",*/}
+                {/*        due_date: "2022-12-31",*/}
+                {/*    }).then(function (response) {*/}
+                {/*        console.log(response);*/}
+                {/*    })*/}
+                {/*        .catch(function (error) {*/}
+                {/*            console.log(error);*/}
+                {/*        })*/}
+                {/*}}>*/}
+                {/*    POST*/}
+                {/*</button>*/}
                 <button onClick={() => {
                     axios.get("http://127.0.0.1:8000/")
                         .then((response) => {
