@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import "./OMS_Front.css"
 
-
 function Practice() {
     const [text, setText] = useState([]);
 
