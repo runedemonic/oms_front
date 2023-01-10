@@ -4,6 +4,14 @@ import "./OMS_Front.css"
 
 function Practice() {
     const [text, setText] = useState([]);
+    const [serviceList, setServiceList] = useState([{service: ""}]);
+
+    const handleServiceChange = (e, index) => {
+        const {name, value} = e.target;
+        const list = [...serviceList];
+        list[index][name] = value;
+        setServiceList(list);
+    };
 
     const [orders, setorders] = useState({
         company_name: "",
@@ -23,6 +31,10 @@ function Practice() {
         })
 
     }
+  const handleServiceAdd = () => {
+    setServiceList([...serviceList, { service: "" }]);
+  };
+
 
     const handleSubmit = () => {
         axios.post('http://localhost:8000/', {
@@ -117,6 +129,13 @@ function Practice() {
 
                 }}>
                     GET
+                </button>
+                <button
+                    type="button"
+                    onClick={handleServiceAdd}
+                    className="add-btn"
+                >
+                    <span>Remove</span>
                 </button>
             </div>
             {text.map((e) => (
