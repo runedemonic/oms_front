@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router'
-import '../css/LoginModal.css';
+// import '../css/LoginModal.css';
 // import GoogleLogin from 'react-google-login';
 
 function LoginModal(props){
@@ -65,7 +65,7 @@ function LoginModal(props){
                 <input type="password" placeholder="비밀번호를 입력하세요" onChange={handlePasswordChange}/>
                 <button className="JoinLoign-button" onClick={(e)=>{
                 e.preventDefault()
-                  fetch('http://localhost:8000/user/signup', {
+                  fetch('http://localhost:8000/user/api-jwt-auth/verify/', {
                     method: 'POST',
                     headers:{
                       'Content-Type': 'application/json'
