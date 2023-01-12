@@ -1,19 +1,29 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import "./OMS_Front.css"
+import {isEmpty} from "yarn/lib/cli";
 
 
 function Practice() {
     const [text, setText] = useState([]);
-    const [serviceList, setServiceList] = useState([{service: ""}]);
+    const [localcontent, setlocalcontent] = useState({
+        company_name: "",
+        product_name: "",
+        product_code: "",
+        price: "",
+        quantity: "",
+        sum: "",
+        due_date: "",
+    });
 
-    const handleServiceChange = (e, index) => {
-        const {name, value} = e.target;
-        const list = [...serviceList];
-        list[index][name] = value;
-        setServiceList(list);
-    };
+    // const handleServiceChange = (e, index) => {
+    //     const {name, value} = e.target;
+    //     const list = [...serviceList];
+    //     list[index][name] = value;
+    //     setServiceList(list);
+    // };
 
+    const [isEdit, setTsEdit] = useState(false);
     const [orders, setorders] = useState({
         company_name: "",
         product_name: "",
@@ -24,6 +34,8 @@ function Practice() {
         due_date: "",
     });
 
+    const toggleIsEdit = () => setTsEdit(!isEdit)
+
     const handleChange = e => {
         setorders({
             ...orders,
@@ -32,10 +44,15 @@ function Practice() {
         })
 
     }
-  const handleServiceAdd = () => {
-    setServiceList([...serviceList, { service: "" }]);
-  };
 
+    const localhandleChange = e => {
+        setlocalcontent({
+            ...localcontent,
+            [e.target.name]: e.target.value,
+
+        })
+
+    }
 
     const handleSubmit = () => {
         axios.post('http://localhost:8000/', {
@@ -131,27 +148,78 @@ function Practice() {
                 }}>
                     GET
                 </button>
-                <button
-                    type="button"
-                    onClick={handleServiceAdd}
-                    className="add-btn"
-                >
-                    <span>Remove</span>
-                </button>
             </div>
             {text.map((e) => (
                 <div>
                     {" "}
                     <div className="list">
                         <span>
-                            {e.id}번, {e.company_name}, {e.product_name}, {e.product_code}, {e.price}, {e.quantity}, {e.sum},
-                            {e.due_date}
+                            {isEdit ? (<>
+                                <input
+                                    type="text"
+                                    name="company_name"
+                                    value={localcontent.company_name}
+                                    onChange={localhandleChange}
+                                />
+                                <input
+                                    type="text"
+                                    name="product_name"
+                                    value={localcontent.product_name}
+                                    onChange={localhandleChange}
+                                />
+                                <input
+                                    type="text"
+                                    name="product_code"
+                                    value={localcontent.product_code}
+                                    onChange={localhandleChange}
+                                />
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={localcontent.price}
+                                    onChange={localhandleChange}
+                                />
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value={localcontent.quantity}
+                                    onChange={localhandleChange}
+                                />
+                                <input
+                                    type="date"
+                                    name="due_date"
+                                    value={localcontent.due_date}
+                                    onChange={localhandleChange}
+                                />
+                            </>) : (
+                                <>{e.id}번, {e.company_name}, {e.product_name}, {e.product_code}, {e.price}, {e.quantity}, {e.sum},
+                                    {e.due_date}</>
+                            )}
+
                         </span>
+                        {isEdit ? <>
+                            <button className="btn-update"
+                                    onClick={toggleIsEdit}>
+                                Update cancle
+                            </button>
+                        </> : <>
+                            <button className="btn-delete"
+                                    onClick={() => {
+                                        axios.delete(`http://localhost:8000/${e.id}`)
+                                        setText(text.filter((text) => text.id !== e.id))
+                                    }}>
+                                DELETE
+                            </button>
+                        </>}
                         <button className="btn-delete"
                                 onClick={() => {
                                     axios.delete(`http://localhost:8000/${e.id}`)
                                     setText(text.filter((text) => text.id !== e.id))
                                 }}>
+                            DELETE
+                        </button>
+                        <button className="btn-update"
+                                onClick={toggleIsEdit}>
                             DELETE
                         </button>
                         {" "}
